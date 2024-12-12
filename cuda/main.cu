@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <cuda_runtime.h>
 
 __global__ void kernel(unsigned char *p)
 {
@@ -11,6 +12,12 @@ __global__ void kernel(unsigned char *p)
 
 int main( void )
 {
+	int devcount = 0;
+	cudaError_t error = cudaGetDeviceCount(&devcount);
+	if (error != cudaSuccess || devcount < 1) {
+		fprintf(stderr, "CUDA device not found\n");
+	}
+
 	unsigned char table[81];
 	unsigned char *mem;
 	cudaMalloc((void **)&mem, 81);
